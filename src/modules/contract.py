@@ -1,5 +1,6 @@
 from typing import Optional
 import pandera as pa
+import pandas as pd
 from pandera.typing import Series
 
 
@@ -31,5 +32,5 @@ class FinancialBaseOutput(FinancialBase):
     changed_at: Optional[pa.Timestamp]
 
     @pa.dataframe_check
-    def check_margem_operacional(cls, df: pa.DataFrame) -> pa.Series[bool]:
+    def check_margem_operacional(cls, df: pd.DataFrame) -> Series[bool]:
         return df['margem_operacional'] == (df['receita_liquida'] / df['receita_operacional'])

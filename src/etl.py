@@ -2,6 +2,8 @@ import pandas as pd
 import pandera as pa
 from modules import FinancialBase, FinancialBaseOutput
 
+from sqlalchemy import create_engine
+
 
 def extract_data(directory: str = "data/dados_financeiros.csv") -> pd.DataFrame:
     """Extrair dados de um arquivo CSV."""
@@ -38,9 +40,11 @@ def transform_data(df: pd.DataFrame) -> pd.DataFrame:
 
 def load_data(df: pd.DataFrame) -> None:
     """Carregar os dados."""
-    df.to_csv('data/processed_data.csv', index=False)
+    # Criando o banco de dados SQLite
+    engine = create_engine('sqlite:///data/financial_data.db')
+    df.to_sql('metricas_financeiras', engine, if_exists="replace", index=False)
 
 
 df = extract_data()
 df = transform_data(df)
-print(df)
+load_data(df)
